@@ -130,77 +130,118 @@ class CreateDemandeView(APIView):
             <head>
                 <meta charset="UTF-8">
                 <style>
-                    body {{ font-family: Arial, sans-serif; }}
-                    .container {{ max-width: 600px; margin: 0 auto; }}
-                    .header {{ background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; text-align: center; }}
-                    .header h1 {{ margin: 0; font-size: 28px; }}
-                    .body {{ padding: 30px; background-color: #f9f9f9; }}
-                    .body-content {{ background-color: white; padding: 20px; border-radius: 8px; border-left: 4px solid #667eea; }}
-                    .details {{ margin-top: 20px; }}
-                    .detail-row {{ display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #eee; }}
-                    .detail-label {{ font-weight: bold; color: #333; }}
-                    .detail-value {{ color: #666; }}
-                    .footer {{ background-color: #333; color: white; padding: 20px; text-align: center; font-size: 12px; }}
-                    .footer p {{ margin: 5px 0; }}
-                    .footer a {{ color: #667eea; text-decoration: none; }}
+                    body {{ font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f5f5f5; margin: 0; padding: 0; }}
+                    .container {{ max-width: 600px; margin: 20px auto; background-color: white; }}
+                    .header {{ background-color: #27ae60; color: white; padding: 40px 20px; text-align: center; }}
+                    .header h1 {{ margin: 0; font-size: 32px; font-weight: 600; }}
+                    .header p {{ margin: 10px 0 0 0; font-size: 16px; opacity: 0.95; }}
+                    .header-divider {{ height: 4px; background-color: #229954; margin-top: 15px; }}
+                    .body {{ padding: 40px; }}
+                    .greeting {{ font-size: 18px; color: #2c3e50; margin-bottom: 25px; }}
+                    .greeting strong {{ color: #27ae60; }}
+                    .status-box {{ background-color: #f0fdf4; border-left: 5px solid #27ae60; padding: 15px; margin-bottom: 30px; }}
+                    .status-text {{ color: #27ae60; font-weight: 600; font-size: 16px; margin: 0; }}
+                    .details-section {{ margin-bottom: 30px; }}
+                    .details-title {{ color: #27ae60; font-weight: 600; font-size: 14px; text-transform: uppercase; margin-bottom: 15px; letter-spacing: 1px; }}
+                    .detail-item {{ display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #ecf0f1; }}
+                    .detail-item:last-child {{ border-bottom: none; }}
+                    .detail-label {{ color: #7f8c8d; font-weight: 500; font-size: 14px; }}
+                    .detail-value {{ color: #2c3e50; font-weight: 600; font-size: 14px; text-align: right; }}
+                    .info-box {{ background-color: #fef5e7; border-left: 5px solid #f39c12; padding: 15px; margin-top: 30px; margin-bottom: 30px; }}
+                    .info-text {{ color: #7d6608; font-size: 13px; margin: 0; }}
+                    .divider {{ height: 1px; background-color: #ecf0f1; margin: 30px 0; }}
+                    .footer {{ background-color: #2c3e50; color: white; padding: 30px 20px; text-align: center; }}
+                    .footer p {{ margin: 8px 0; font-size: 13px; }}
+                    .footer-title {{ font-size: 14px; font-weight: 600; margin-bottom: 15px; }}
+                    .footer-contact {{ color: #ecf0f1; margin-top: 15px; }}
+                    .footer-divider {{ height: 1px; background-color: #34495e; margin: 15px 0; }}
                 </style>
             </head>
             <body>
                 <div class="container">
                     <!-- HEADER -->
                     <div class="header">
-                        <h1>🎯 GTAP - Nouvelle Demande</h1>
+                        <h1>✓ DEMANDE CRÉÉE</h1>
+                        <p>Votre demande a été enregistrée avec succès</p>
+                        <div class="header-divider"></div>
                     </div>
                     
                     <!-- BODY -->
                     <div class="body">
-                        <div class="body-content">
-                            <p>Bonjour <strong>{request.user.get_full_name() or request.user.username}</strong>,</p>
-                            <p>Votre demande a été <strong style="color: #28a745;">créée avec succès</strong>!</p>
-                            
-                            <div class="details">
-                                <div class="detail-row">
-                                    <span class="detail-label">ID Demande:</span>
-                                    <span class="detail-value"># {demande.id}</span>
-                                </div>
-                                <div class="detail-row">
-                                    <span class="detail-label">Service:</span>
-                                    <span class="detail-value">{service.titre}</span>
-                                </div>
-                                <div class="detail-row">
-                                    <span class="detail-label">Prix:</span>
-                                    <span class="detail-value">{service.prix} {service.devise}</span>
-                                </div>
-                                <div class="detail-row">
-                                    <span class="detail-label">Date:</span>
-                                    <span class="detail-value">{demande.date.strftime('%d/%m/%Y à %H:%M')}</span>
-                                </div>
-                                <div class="detail-row">
-                                    <span class="detail-label">Statut:</span>
-                                    <span class="detail-value"><strong style="color: #FFC107;">⏳ {demande.statut}</strong></span>
-                                </div>
-                                <div class="detail-row">
-                                    <span class="detail-label">Latitude:</span>
-                                    <span class="detail-value">{latitude}</span>
-                                </div>
-                                <div class="detail-row">
-                                    <span class="detail-label">Longitude:</span>
-                                    <span class="detail-value">{longitude}</span>
-                                </div>
+                        <p class="greeting">Bienvenue <strong>{request.user.get_full_name() or request.user.username}</strong>,</p>
+                        
+                        <div class="status-box">
+                            <p class="status-text">✓ Votre demande a été enregistrée et est en attente de traitement</p>
+                        </div>
+                        
+                        <!-- Identifiant Section -->
+                        <div class="details-section">
+                            <div class="details-title">Numéro de Demande</div>
+                            <div class="detail-item">
+                                <span class="detail-label">ID:</span>
+                                <span class="detail-value">GTAP-{demande.id:06d}</span>
                             </div>
-                            
-                            <p style="margin-top: 20px; color: #666; font-size: 14px;">
-                                Vous recevrez une notification dès que votre demande sera traitée.
+                        </div>
+                        
+                        <!-- Service Section -->
+                        <div class="details-section">
+                            <div class="details-title">Détails du Service</div>
+                            <div class="detail-item">
+                                <span class="detail-label">Service:</span>
+                                <span class="detail-value">{service.titre}</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Prix:</span>
+                                <span class="detail-value">{service.prix} {service.devise}</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Localisation Section -->
+                        <div class="details-section">
+                            <div class="details-title">Localisation</div>
+                            <div class="detail-item">
+                                <span class="detail-label">Latitude:</span>
+                                <span class="detail-value">{latitude}</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Longitude:</span>
+                                <span class="detail-value">{longitude}</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Date & Statut Section -->
+                        <div class="details-section">
+                            <div class="details-title">Information</div>
+                            <div class="detail-item">
+                                <span class="detail-label">Date:</span>
+                                <span class="detail-value">{demande.date.strftime('%d/%m/%Y à %H:%M')}</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Statut:</span>
+                                <span class="detail-value" style="color: #f39c12;">EN ATTENTE</span>
+                            </div>
+                        </div>
+                        
+                        <div class="info-box">
+                            <p class="info-text">
+                                <strong>Note:</strong> Vous recevrez une notification par email dès que votre demande sera traitée. 
+                                Conservez votre numéro de demande pour vos références futures.
                             </p>
                         </div>
                     </div>
                     
+                    <div class="divider"></div>
+                    
                     <!-- FOOTER -->
                     <div class="footer">
-                        <p><strong>GTAP - Service de Gestion</strong></p>
-                        <p>gtaplit@gmail.com</p>
-                        <p style="margin-top: 15px; border-top: 1px solid #555; padding-top: 10px;">
-                            © 2026 GTAP. Tous droits réservés.
+                        <div class="footer-title">GTAP - Gestion des Demandes</div>
+                        <div class="footer-contact">
+                            <p>📧 <strong>Email:</strong> gtaplit@gmail.com</p>
+                            <p>📱 <strong>Service Client:</strong> Disponible 24/7</p>
+                        </div>
+                        <div class="footer-divider"></div>
+                        <p style="margin-top: 20px; color: #bdc3c7; font-size: 12px;">
+                            © 2026 GTAP. Tous droits réservés. | Gestion des demandes de service
                         </p>
                     </div>
                 </div>
