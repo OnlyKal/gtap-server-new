@@ -1,5 +1,4 @@
 asgiref==3.9.1
-Django==5.2.5
 django-admin-interface==0.30.1
 django-colorfield==0.14.0
 djangorestframework==3.16.1

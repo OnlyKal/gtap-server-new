@@ -1,10 +1,11 @@
 from django.urls import path
-from .views import CancelDemandeView, CreateDemandeView, PaiementCreateView, ServiceListView, SignUpView, LoginView, UserDetailView,PaiementListView
+from .views import CancelDemandeView, ChangePasswordView, CreateDemandeView, PaiementCreateView, ServiceListView, SignUpView, LoginView, UserDetailView,PaiementListView
 
 urlpatterns = [
     path('signup/', SignUpView.as_view(), name='signup'),
     path('login/', LoginView.as_view(), name='login'),
     path('me/', UserDetailView.as_view(), name='user-detail'),
+    path('change-password/', ChangePasswordView.as_view(), name='change-password'),
     path('services/', ServiceListView.as_view(), name='services-detail'),
     
     
