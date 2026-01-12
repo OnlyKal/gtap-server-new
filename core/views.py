@@ -7,6 +7,8 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth import authenticate
 from rest_framework import generics, permissions
+from django.core.mail import send_mail
+from django.conf import settings
 # Sign up
 class SignUpView(APIView):
     def post(self, request):
@@ -117,6 +119,106 @@ class CreateDemandeView(APIView):
             longitude=longitude,
             latitude=latitude
         )
+        
+        # Send email notification
+        try:
+            subject = "Nouvelle demande créée - GTAP"
+            
+            html_message = f"""
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <meta charset="UTF-8">
+                <style>
+                    body {{ font-family: Arial, sans-serif; }}
+                    .container {{ max-width: 600px; margin: 0 auto; }}
+                    .header {{ background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; text-align: center; }}
+                    .header h1 {{ margin: 0; font-size: 28px; }}
+                    .body {{ padding: 30px; background-color: #f9f9f9; }}
+                    .body-content {{ background-color: white; padding: 20px; border-radius: 8px; border-left: 4px solid #667eea; }}
+                    .details {{ margin-top: 20px; }}
+                    .detail-row {{ display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #eee; }}
+                    .detail-label {{ font-weight: bold; color: #333; }}
+                    .detail-value {{ color: #666; }}
+                    .footer {{ background-color: #333; color: white; padding: 20px; text-align: center; font-size: 12px; }}
+                    .footer p {{ margin: 5px 0; }}
+                    .footer a {{ color: #667eea; text-decoration: none; }}
+                </style>
+            </head>
+            <body>
+                <div class="container">
+                    <!-- HEADER -->
+                    <div class="header">
+                        <h1>🎯 GTAP - Nouvelle Demande</h1>
+                    </div>
+                    
+                    <!-- BODY -->
+                    <div class="body">
+                        <div class="body-content">
+                            <p>Bonjour <strong>{request.user.get_full_name() or request.user.username}</strong>,</p>
+                            <p>Votre demande a été <strong style="color: #28a745;">créée avec succès</strong>!</p>
+                            
+                            <div class="details">
+                                <div class="detail-row">
+                                    <span class="detail-label">ID Demande:</span>
+                                    <span class="detail-value"># {demande.id}</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span class="detail-label">Service:</span>
+                                    <span class="detail-value">{service.titre}</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span class="detail-label">Prix:</span>
+                                    <span class="detail-value">{service.prix} {service.devise}</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span class="detail-label">Date:</span>
+                                    <span class="detail-value">{demande.date.strftime('%d/%m/%Y à %H:%M')}</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span class="detail-label">Statut:</span>
+                                    <span class="detail-value"><strong style="color: #FFC107;">⏳ {demande.statut}</strong></span>
+                                </div>
+                                <div class="detail-row">
+                                    <span class="detail-label">Latitude:</span>
+                                    <span class="detail-value">{latitude}</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span class="detail-label">Longitude:</span>
+                                    <span class="detail-value">{longitude}</span>
+                                </div>
+                            </div>
+                            
+                            <p style="margin-top: 20px; color: #666; font-size: 14px;">
+                                Vous recevrez une notification dès que votre demande sera traitée.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <!-- FOOTER -->
+                    <div class="footer">
+                        <p><strong>GTAP - Service de Gestion</strong></p>
+                        <p>gtaplit@gmail.com</p>
+                        <p style="margin-top: 15px; border-top: 1px solid #555; padding-top: 10px;">
+                            © 2026 GTAP. Tous droits réservés.
+                        </p>
+                    </div>
+                </div>
+            </body>
+            </html>
+            """
+            
+            send_mail(
+                subject,
+                f"Votre demande #{demande.id} a été créée avec succès!",
+                settings.DEFAULT_FROM_EMAIL,
+                [request.user.email],
+                html_message=html_message,
+                fail_silently=False,
+            )
+        except Exception as e:
+            print(f"Erreur lors de l'envoi du mail: {e}")
+        
         serializer = DemandeSerializer(demande)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
